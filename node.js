@@ -1,22 +1,19 @@
 const express =require('express')
-const mangoose =require('mangoose')
+const mongoose =require('mongoose')
 const bcrypto =require('bcrypt')
 const path = require('path')
-const { execPath } = require('process')
-const { connect } = require('http2')
-const { default: mongoose } = require('mongoose')
 
-/*const app=express();
+const app=express();
+//app.use(express.urlencoded({ extended: true }));
+app.use(express.static(__dirname))
 
-app.get('/',(req/res)=>){
-    res.reader("Fill out Survey")
-}
+mongoose.connect("mongodb+srv://zanelek366:Zanele23@surveyresultsdb.36vxtll.mongodb.net/?retryWrites=true&w=majority&appName=SurveyResultsDB",{ 
+  
+  tls: true
+ })
+ .then(() => console.log("Connected to MongoDB Atlas!"))
+ .catch((err) => console.error("Connection error:", err));
 
-app.get()*/
-app.use(express.urlencoded({ extended: true }));
-
-
-mongoose.connect("mongodb://localhost:27017/surveyDB",{ useNewUrlParser: true, useUnifiedTopology: true });
 const surveySchema= new mongoose.Schema({
     fname:String,
     email: String,
@@ -24,14 +21,27 @@ const surveySchema= new mongoose.Schema({
     contactNum:String,
     favFood:[String],
     likesMovies: String,
-     likesRadio: String,
-     likesEatOut: String,
-   likesTV: String
+    likesRadio: String,
+    likesEatOut: String,
+    likesTV: String
 });
 
+const Survey = mongoose.model('Survey', surveySchema);
+
+ app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html')); 
+});
+
+
 app.post("/submit-survey", (req, res)=>{
+      let favFood = req.body.favFood;
+      if (!favFood) {
+      favFood = [];
+    } else if (!Array.isArray(favFood)) {
+      favFood = [favFood];
+    }
     const newSurvey = new Survey({
-        name: req.body.fname,
+        fname: req.body.fname,
         email: req.body.email,
         dob: new Date(req.body.dob),
         contactNum: req.body.cnum,
@@ -40,13 +50,54 @@ app.post("/submit-survey", (req, res)=>{
         likesRadio: req.body.row2,
         likesEatOut: req.body.row3,
         likesTV: req.body.row4
-    });
+    })
+    
+    await newSurvey.save()
+    console.log(newSurvey)
+    res.send("Submitted successfully")
+  })
+
+    app.listen(3000, () => console.log("Server running on http://localhost:3000"));
+
 
     newSurvey.save()
-    .then(()=>res.redirect("/view-results"))
+    .then(()=>{
+         res.send(`
+        <h1>Submitted successfully!</h1>
+        <p><a href="/view-results">Click here to view results</a></p>
+        <script>
+          setTimeout(() => {
+            window.location.href = "/view-results";
+          }, 3000);
+        </script>
+      `);
+    })
     .catch((err)=> res.status(500).send(err));
 });
-app.listen(3000, () => console.log("Server running on http://localhost:3000"));
+
+app.get("/view-results", async (req, res) => {
+  try {
+    const surveys = await Survey.find({});
+    if (surveys.length === 0) {
+      return res.send(`
+        <h1>No Surveys Available</h1>
+        <a href="/">Back to survey</a>
+      `);
+    }
+
+    let resultsHtml = "<h1>Survey Results</h1><ul>";
+    surveys.forEach(survey => {
+      resultsHtml += `<li>${survey.fname} (${survey.email}) - Favorite Food: ${survey.favFood.join(", ")}</li>`;
+    });
+    resultsHtml += "</ul><a href='/'>Back to survey</a>";
+    res.send(resultsHtml);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+ 
+
 
 
 
