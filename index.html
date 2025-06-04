@@ -7,7 +7,7 @@
 
     </head>
     <body>
-        <form  action="" method="post">
+        <form  action="/submit-survey" method="post">
 
         <h1>_Suveys </h1>
         <div class="links-container">
@@ -21,23 +21,25 @@
         
             <p><b>Personal Details:</b></p></br>
             <label for="fname"><strong>Full Names:</strong></label>
-            <input type="text" id="fname" ></br>
+            <input type="text" id="fname" name="fname"  ></br>
             <label for="email"><strong>Email:</strong></label>
-            <input type="email" id="email" ></br>
+            <input type="email" id="email"  name="email"></br>
             <label for="dob"><strong>Date of Birth:</strong></label>
-            <input type="date" id="dob" ></br>
+            <input type="date" id="dob" name="dob" ></br>
             <label for="tel"><strong>Contact Number:</strong></label>
-            <input type="tel" id="cnum" ></br>
+            <input type="tel" id="cnum" name="cnum"></br>
         </div>
             <p><b>What is your favorite food?</b></p>
-            <input type="checkbox" id="pizza">
+            <input type="checkbox" id="pizza" name="favFood" >
             <label for="pizza">Pizza</label>
-            <input type="checkbox" id="pasta">
+            <input type="checkbox" id="pasta" name="favFood" >
             <label for="pasta" >Pasta</label>
-            <input type="checkbox" id="pap&wors">
+            <input type="checkbox" id="pap&wors" name="favFood" >
             <label for="pap and wors">Pap and Wors</label>
-            <input type="checkbox" id="other">
+            <input type="checkbox" id="other" name="favFood" >
             <label for="other">Other</label>
+            <input type="checkbox" id="other" name="favFood" value="Other">
+
             </br>
 
             <p>Please rate your level of aggrement on a scale of 1 to 5, with 1 being "strongly agree" and 5 being "strongly disagree".</p>
