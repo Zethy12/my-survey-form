@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express =require('express')
 const mongoose =require('mongoose')
 const path = require('path')
@@ -8,12 +9,11 @@ app.use(express.static(__dirname))
 const port = 3000;
 
 
-mongoose.connect("mongodb+srv://zanelek366:Zanele23@surveyresultsdb.36vxtll.mongodb.net/?retryWrites=true&w=majority&appName=SurveyResultsDB",{ 
-  
-  tls: true
- })
- .then(() => console.log("Connected to MongoDB Atlas!"))
- .catch((err) => console.error("Connection error:", err));
+mongoose.connect(process.env.MONGO_URI, { 
+  tls: true })
+  .then(() => console.log("Connected to MongoDB Atlas!"))
+  .catch((err) => console.error("Connection error:", err));
+
 
  
 const surveySchema= new mongoose.Schema({
