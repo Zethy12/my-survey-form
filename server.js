@@ -1,6 +1,5 @@
 const express =require('express')
 const mongoose =require('mongoose')
-const bcrypto =require('bcrypt')
 const path = require('path')
 
 const app=express();
@@ -33,6 +32,7 @@ const Survey = mongoose.model('Survey', surveySchema);
 
  app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html')); 
+
 });
 
 
@@ -48,18 +48,13 @@ app.post("/submit-survey", (req, res)=>{
         email: req.body.email,
         dob: new Date(req.body.dob),
         contactNum: req.body.cnum,
-        favFood:req.body.favFood,
+        favFood:favFood,
         likesMovies: req.body.row1,
         likesRadio: req.body.row2,
         likesEatOut: req.body.row3,
         likesTV: req.body.row4
     })
     
-    
-  
-
-    app.listen(3000, () => console.log("Server running on http://localhost:3000"));
-
 
     newSurvey.save()
     .then(()=>{
@@ -81,6 +76,7 @@ app.get("/view-results", async (req, res) => {
     const surveys = await Survey.find({});
     if (surveys.length === 0) {
       return res.send(`
+
         <h1>No Surveys Available</h1>
         <a href="/">Back to survey</a>
       `);
@@ -97,10 +93,6 @@ app.get("/view-results", async (req, res) => {
   }
 });
 
-app.post('/submit-survey', (req, res) => {
-  console.log('Form data received:', req.body);
-  res.send('Thanks for submitting the survey!');
-});
 
 app.listen(port, () => {
   console.log(`Server listening on http://localhost:${port}`);
