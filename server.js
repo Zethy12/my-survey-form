@@ -22,10 +22,10 @@ const surveySchema= new mongoose.Schema({
     dob:Date,
     contactNum:String,
     favFood:[String],
-    likesMovies: String,
-    likesRadio: String,
-    likesEatOut: String,
-    likesTV: String
+    likesMovies: { type: Number, required: true },
+    likesRadio: { type: Number, required: true },
+    likesEatOut: { type: Number, required: true },
+    likesTV: { type: Number, required: true }
 });
 
 const Survey = mongoose.model('Survey', surveySchema);
@@ -71,28 +71,78 @@ app.post("/submit-survey", (req, res)=>{
     .catch((err)=> res.status(500).send(err));
   });
 
-app.get("/view-results", async (req, res) => {
-  try {
-    const surveys = await Survey.find({});
-    if (surveys.length === 0) {
-      return res.send(`
-
-        <h1>No Surveys Available</h1>
+  app.get("/view-results", async (req, res) => {
+    try {
+      const surveys = await Survey.find({});
+      const total = surveys.length;
+  
+      if (total === 0) {
+        return res.send("<h1>No Surveys Available</h1><a href='/'>Back to survey</a>");
+      }
+  
+      // Calculate age difference from DOB
+      const ages = surveys.map(s => {
+        const ageDifMs = Date.now() - new Date(s.dob).getTime();
+        return Math.floor(ageDifMs / (1000 * 60 * 60 * 24 * 365.25));
+      });
+  
+      const averageAge = (ages.reduce((a, b) => a + b, 0) / total).toFixed(1);
+      const minAge = Math.min(...ages);
+      const maxAge = Math.max(...ages);
+  
+      // Percentages for favorite foods
+      const foodCounts = { Pizza: 0, Pasta: 0, "Pap and Wors": 0 };
+      surveys.forEach(s => {
+        if (s.favFood.includes("Pizza")) foodCounts.Pizza++;
+        if (s.favFood.includes("Pasta")) foodCounts.Pasta++;
+        if (s.favFood.includes("Pap and Wors")) foodCounts["Pap and Wors"]++;
+      });
+  
+      const pizzaPct = ((foodCounts.Pizza / total) * 100).toFixed(1);
+      const pastaPct = ((foodCounts.Pasta / total) * 100).toFixed(1);
+      const papWorsPct = ((foodCounts["Pap and Wors"] / total) * 100).toFixed(1);
+  
+      // Average ratings
+      const avg = key => {
+        const ratings = surveys
+          .map(s => Number(s[key]))
+          .filter(n => !isNaN(n));
+          
+        return ratings.length
+          ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1)
+          : "N/A";
+      };
+      
+      const avgMovies = avg("likesMovies");
+      const avgRadio = avg("likesRadio");
+      const avgEatOut = avg("likesEatOut");
+      const avgTV = avg("likesTV");
+      
+      const html = `
+        <h1>Survey Results</h1>
+        <p>Total number of surveys: <b>${total}</b></p>
+        <p>Average Age: <b>${averageAge}</b></p>
+        <p>Oldest person who participated: <b>${maxAge}</b></p>
+        <p>Youngest person who participated: <b>${minAge}</b></p>
+        <br>
+        <p>Percentage who like Pizza: <b>${pizzaPct}%</b></p>
+        <p>Percentage who like Pasta: <b>${pastaPct}%</b></p>
+        <p>Percentage who like Pap and Wors: <b>${papWorsPct}%</b></p>
+        <br>
+        <p>People who like to watch movies:${avgMovies}</p>
+        <p>People who like to listen to radio:${avgRadio}</p>
+        <p>People who like to eat out:${avgEatOut}</p>
+        <p>People who like to watch TV :${avgTV}</p>
+        <br>
         <a href="/">Back to survey</a>
-      `);
+      `;
+      res.send(html);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Error retrieving results.");
     }
-
-    let resultsHtml = "<h1>Survey Results</h1><ul>";
-    surveys.forEach(survey => {
-      resultsHtml += `<li>${survey.fname} (${survey.email}) - Favorite Food: ${survey.favFood.join(", ")}</li>`;
-    });
-    resultsHtml += "</ul><a href='/'>Back to survey</a>";
-    res.send(resultsHtml);
-  } catch (err) {
-    res.status(500).send(err);
-  }
-});
-
+  });
+  
 
 app.listen(port, () => {
   console.log(`Server listening on http://localhost:${port}`);
