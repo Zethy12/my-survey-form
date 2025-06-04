@@ -1,0 +1,33 @@
+
+body{
+  background-image: url(images/background-for-productgraphy-ai-generated-photo.jpg);
+  background-size: cover;
+  background-position: center;  
+}
+h1{
+  color:  white;
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  
+}
+.container{
+ 
+}
+form{
+  color: black;
+    position:center;
+}
+
+.links-container{
+  position: absolute;
+  top:0;
+  right: 0;
+  padding: 30px;
+}
+
+.links-container a{
+  text-decoration: none;
+  padding: 5px;
+}

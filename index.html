@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="style.css"/>
+        <title>User Interface</title>
+
+    </head>
+    <body>
+        <form  action="" method="post">
+
+        <h1>_Suveys </h1>
+        <div class="links-container">
+            <a href="#">FILL OUT SURVEY</a>
+            <a href="#">VIEW SURVEY RESULTS</a>
+
+        </div>
+    
+        <div class="container">
+
+        
+            <p><b>Personal Details:</b></p></br>
+            <label for="fname"><strong>Full Names:</strong></label>
+            <input type="text" id="fname" ></br>
+            <label for="email"><strong>Email:</strong></label>
+            <input type="email" id="email" ></br>
+            <label for="dob"><strong>Date of Birth:</strong></label>
+            <input type="date" id="dob" ></br>
+            <label for="tel"><strong>Contact Number:</strong></label>
+            <input type="tel" id="cnum" ></br>
+        </div>
+            <p><b>What is your favorite food?</b></p>
+            <input type="checkbox" id="pizza">
+            <label for="pizza">Pizza</label>
+            <input type="checkbox" id="pasta">
+            <label for="pasta" >Pasta</label>
+            <input type="checkbox" id="pap&wors">
+            <label for="pap and wors">Pap and Wors</label>
+            <input type="checkbox" id="other">
+            <label for="other">Other</label>
+            </br>
+
+            <p>Please rate your level of aggrement on a scale of 1 to 5, with 1 being "strongly agree" and 5 being "strongly disagree".</p>
+            <table  style="width:50%">
+                <tr>
+                    <th><!-- It's empty --></th>
+                    <th>Strongly Agree</th>
+                    <th>Agree</th>
+                    <th>Neutral</th>
+                    <td>Disagree</td>
+                    <td>Strongly Disagree</td>
+                </tr>
+
+                <tr>
+                    <td>I like to watch movies</td>
+                    <td><input type="radio" id="sa" value="Strongly Agree" name="row1"></td>
+                    <td><input type="radio" id="agree" value="Agree" name="row1"></td>
+                    <td><input type="radio" id="neutral" value="Neutral" name="row1"></td>
+                    <td><input type="radio" id="disagree" value="Disagree" name="row1"></td>
+                    <td><input type="radio" id="sd" value="Strongly Disagree" name="row1"></td>
+                </tr>
+                <tr>
+                    <td>I like to listen to radio</td>
+                    <td><input type="radio" id="sa" value="Strongly Agree" name="row2"></td>
+                    <td><input type="radio" id="agree" value="Agree" name="row2"></td>
+                    <td><input type="radio" id="neutral" value="Neutral" name="row2"></td>
+                    <td><input type="radio" id="disagree" value="Disagree" name="row2"></td>
+                    <td><input type="radio" id="sd" value="Strongly Disagree" name="row2"></td>
+                </tr>
+                <tr>
+                    <td>I like to eat out</td>
+                    <td><input type="radio" id="sa" value="Strongly Agree" name="row3"></td>
+                    <td><input type="radio" id="agree" value="Agree" name="row3"></td>
+                    <td><input type="radio" id="neutral" value="Neutral" name="row3"></td>
+                    <td><input type="radio" id="disagree" value="Disagree" name="row3"></td>
+                    <td><input type="radio" id="sd" value="Strongly Disagree" name="row3"></td>
+                </tr>
+                <tr>
+                    <td>I like to watch TV</td>
+                    <td><input type="radio" id="sa" value="Strongly Agree" name="row4"></td>
+                    <td><input type="radio" id="agree" value="Agree" name="row4"></td>
+                    <td><input type="radio" id="neutral" value="Neutral" name="row4"></td>
+                    <td><input type="radio" id="disagree" value="Disagree" name="row4"></td>
+                    <td><input type="radio" id="sd" value="Strongly Disagree" name="row4"></td>
+                </tr>
+            </table>
+            <input type="submit" id="submit"> 
+            
+
+        </form>
+
+    </body>
+</html>
